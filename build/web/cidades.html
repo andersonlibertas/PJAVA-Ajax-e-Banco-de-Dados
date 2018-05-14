@@ -1,0 +1,73 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+
+        <script type="text/javascript">
+            
+            $(document).ready(function() {
+                $("#formulario").submit(function(e){
+                    e.preventDefault();
+                });
+
+                $("#botao").click(function(e){
+                    var pesquisa = $("#pesquisa").val();
+                    parametros = "pesquisa=" + pesquisa;
+
+                    $.ajax({
+                       
+                       
+                        type: "POST",
+                        url: "Controle?m=ModeloAjaxCidades",
+                        data: parametros,
+                        dataType: "json",
+
+                        success: function( data, textStatus, jqXHR) {
+                            $("#resposta").html("");
+	
+                            for (var i in data) {
+                                $("#resposta").append(data[i].cidade);
+                                $("#resposta").append("-");
+                                $("#resposta").append(data[i].estado);
+                                $("#resposta").append("<br/>");
+                            }
+                        },
+
+                        error: function(jqXHR, textStatus, errorThrown){
+                            $("#resposta").html(jqXHR.responseText);
+                        },
+                        beforeSend: function(jqXHR, settings){
+                            $("#botao").attr("disabled", true);
+                        },
+                        complete: function(jqXHR, textStatus){
+                            $("#botao").attr("disabled", false);
+                        }
+
+
+                       
+                       
+                       
+                       
+                    });       
+                });
+            });
+
+        </script>
+
+    </head>
+    <body>
+        <h1>Cadastro de Cidades</h1>
+        <form id="formulario">
+            <input id="pesquisa" type="text" name="pesquisa" />
+            <input id="botao" type="button" value="Submit" />
+        </form>
+        Resposta do jQuery Ajax:
+        <div id="resposta"></div>
+    </body>
+</html>
